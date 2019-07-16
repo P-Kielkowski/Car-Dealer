@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CarDealer.Api.Controllers
 {
@@ -10,10 +11,19 @@ namespace CarDealer.Api.Controllers
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
+		private readonly ILogger<ValuesController> logger;
+
+		public ValuesController( ILogger<ValuesController> logger )
+		{
+			this.logger = logger;
+		}
+
 		// GET api/values
 		[HttpGet]
 		public ActionResult<IEnumerable<string>> Get()
 		{
+			this.logger.LogInformation("Getting all items");
+
 			return new string[] { "value1", "value2" };
 		}
 
@@ -21,6 +31,8 @@ namespace CarDealer.Api.Controllers
 		[HttpGet("{id}")]
 		public ActionResult<string> Get(int id)
 		{
+			this.logger.LogInformation("Getting item {ID}", id);
+
 			return "value";
 		}
 

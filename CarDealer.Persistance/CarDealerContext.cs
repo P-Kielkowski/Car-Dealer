@@ -19,7 +19,7 @@ namespace CarDealer.Persistance
 
 		public async Task<int> SaveChangesAsync()
 		{
-			return await this.SaveChangesAsync();
+			return await base.SaveChangesAsync();
 		}
 
 		public DbSet<Make> Makes { get; set; }

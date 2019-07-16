@@ -16,6 +16,7 @@ using CarDealer.Common;
 using CarDealer.Persistance;
 using CarDealer.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace CarDealer.Api
 {
@@ -43,6 +44,10 @@ namespace CarDealer.Api
 				mg => mg.MigrationsAssembly("CarDealer.Persistance")
 			));
 
+			services.AddSwaggerGen( c=> {
+				c.SwaggerDoc("v1", new Info { Title = "CarDealer API", Version = "V1" });
+			});
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +62,12 @@ namespace CarDealer.Api
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
+
+
+			app.UseSwagger();
+			app.UseSwaggerUI(c => {
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1");
+			});
 
 			app.UseHttpsRedirection();
 			app.UseMvc();

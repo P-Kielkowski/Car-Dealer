@@ -25,7 +25,6 @@ namespace CarDealer.Common
 		public async Task HandleCommandAsync<TCommand>(TCommand command) where TCommand : ICommand
 		{
 			var handler = serviceProvider.GetService<ICommandHandler<TCommand>>();
-			var handlder = serviceProvider.GetService<ICommand>();
 
 			await handler.HandleAsync(command);
 		}

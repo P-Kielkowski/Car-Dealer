@@ -8,6 +8,7 @@ using CarDealer.Application.Makes.Commands.DeleteMake;
 using CarDealer.Application.Makes.Queries.GetMake;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CarDealer.Api.Controllers
 {
@@ -15,15 +16,23 @@ namespace CarDealer.Api.Controllers
     [ApiController]
     public class MakeController : BaseController
     {
-		public MakeController(IDispatcher dispatcher) : base(dispatcher) { }
+		private readonly ILogger<MakeController> logger;
+		public MakeController(ILogger<MakeController> logger ,IDispatcher dispatcher) : base(dispatcher)
+		{
+			this.logger = logger;
+		}
 
 		[HttpGet("{Id}")]
 		public async Task<ActionResult<GateMakeDto>> GetMake([FromRoute] GateMakeQuery query)
 		{
 			var make = await this.dispatcher.HandleQueryAsync<GateMakeQuery, GateMakeDto>(query);
+			this.logger.LogInformation("Getting item {ID}", query.Id);
 
 			if (make == null)
+			{
+				this.logger.LogWarning("Cannot find Make object with corresponding id: {0}", query.Id);
 				return NotFound();
+			}
 
 			return Ok(make);
 		}
@@ -36,10 +45,10 @@ namespace CarDealer.Api.Controllers
 			return Ok();
 		}
 
-		[HttpDelete("{Id}")]
-		public async Task<ActionResult> Delete([FromRoute] DeleteMakeCommand command)
+		[HttpDelete("{id}")]
+		public async Task<ActionResult> Delete( int id)
 		{
-			await this.dispatcher.HandleCommandAsync(command);
+			await this.dispatcher.HandleCommandAsync( new DeleteMakeCommand(id) );
 
 			return Ok();
 		}
