@@ -17,6 +17,9 @@ using CarDealer.Persistance;
 using CarDealer.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace CarDealer.Api
 {
@@ -51,7 +54,7 @@ namespace CarDealer.Api
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<Startup> logger)
 		{
 			if (env.IsDevelopment())
 			{
@@ -63,14 +66,26 @@ namespace CarDealer.Api
 				app.UseHsts();
 			}
 
+			app.UseExceptionHandler(appError => appError.Run(async context =>
+			{
+				context.Response.ContentType = "application/json";
+
+				var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+				if (contextFeature != null)
+				{
+					logger.LogError($"Something went wrong: {contextFeature.Error}");
+
+					await context.Response.WriteAsync("Global error Handled. Code: " + context.Response.StatusCode + " |Error: " + contextFeature.Error.Message );
+				}
+			}));
+
+			app.UseHttpsRedirection();
+			app.UseMvc();
 
 			app.UseSwagger();
 			app.UseSwaggerUI(c => {
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1");
 			});
-
-			app.UseHttpsRedirection();
-			app.UseMvc();
 		}
 	}
 }
