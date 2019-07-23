@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarDealer.Application.Makes.Queries.GetMake
+namespace CarDealer.Application.Dto
 {
-	public class GateMakeDto
+	public class MakeDto
 	{
 		public int Id { get; set; }
-
 		public string Name { get; set; }
 	}
 }

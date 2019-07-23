@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,10 +13,12 @@ namespace CarDealer.Api.Controllers
 	public class ValuesController : ControllerBase
 	{
 		private readonly ILogger<ValuesController> logger;
+		private readonly IHttpClientFactory httpClientFactory;
 
-		public ValuesController( ILogger<ValuesController> logger )
+		public ValuesController( ILogger<ValuesController> logger, IHttpClientFactory httpClientFactory )
 		{
 			this.logger = logger;
+			this.httpClientFactory = httpClientFactory;
 		}
 
 		// GET api/values
@@ -29,8 +32,14 @@ namespace CarDealer.Api.Controllers
 
 		// GET api/values/5
 		[HttpGet("{id}")]
-		public ActionResult<string> Get(int id)
+		public async Task<ActionResult<string>> Get(int id)
 		{
+
+			//get from httpclient configured in startup 
+			var client = httpClientFactory.CreateClient("PolyClient");
+			var result = await client.GetAsync("https://httpbin.org/get");
+
+
 			this.logger.LogInformation("Getting item {ID}", id);
 
 			return "value";

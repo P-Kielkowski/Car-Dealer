@@ -4,11 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarDealer.Application.Makes.Queries.GetMake
+namespace CarDealer.Application.Makes.Queries.GetAllMakes
 {
-	public class GateMakeQuery : IQuery<MakeDto>
+	public class GetAllMakesQuery : IQuery<List<MakeWithModelsDto>>
 	{
-		public int Id { get; set; }
-
 	}
 }

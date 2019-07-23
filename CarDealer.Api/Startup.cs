@@ -20,14 +20,20 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Polly;
+using AutoMapper;
+using System.Reflection;
 
 namespace CarDealer.Api
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		private readonly ILoggerFactory loggerFactory;
+
+		public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
 		{
 			Configuration = configuration;
+			this.loggerFactory = loggerFactory;
 		}
 
 		public IConfiguration Configuration { get; }
@@ -39,7 +45,6 @@ namespace CarDealer.Api
 
 			services.AddQueryOrCommand(typeof(ICommandHandler<>));
 			services.AddQueryOrCommand(typeof(IQueryHandler<,>));
-
 			services.AddScoped<IDispatcher, Dispatcher>();
 
 			services.AddDbContext<ICarDealerContext, CarDealerContext>(
@@ -47,14 +52,13 @@ namespace CarDealer.Api
 				mg => mg.MigrationsAssembly("CarDealer.Persistance")
 			));
 
-			services.AddSwaggerGen( c=> {
-				c.SwaggerDoc("v1", new Info { Title = "CarDealer API", Version = "V1" });
-			});
-
+			services.AddAutoMapper(Assembly.GetAssembly(typeof(ICarDealerContext)));
+			services.AddPollyHttpClient(loggerFactory, "PolyClient", "https://httasfdasfdasfasfdsasdpbin.org/get", 5);
+			services.AddSwaggerGen( c=> c.SwaggerDoc("v1", new Info { Title = "CarDealer API", Version = "V1" }));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<Startup> logger)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
@@ -66,26 +70,12 @@ namespace CarDealer.Api
 				app.UseHsts();
 			}
 
-			app.UseExceptionHandler(appError => appError.Run(async context =>
-			{
-				context.Response.ContentType = "application/json";
-
-				var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-				if (contextFeature != null)
-				{
-					logger.LogError($"Something went wrong: {contextFeature.Error}");
-
-					await context.Response.WriteAsync("Global error Handled. Code: " + context.Response.StatusCode + " |Error: " + contextFeature.Error.Message );
-				}
-			}));
-
+			app.UseExceptionHandler(loggerFactory);
 			app.UseHttpsRedirection();
 			app.UseMvc();
-
 			app.UseSwagger();
-			app.UseSwaggerUI(c => {
-				c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1");
-			});
+			app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1"));
+
 		}
 	}
 }
