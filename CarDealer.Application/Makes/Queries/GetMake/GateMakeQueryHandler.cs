@@ -2,15 +2,17 @@
 using CarDealer.Application.Dto;
 using CarDealer.Application.Interfaces;
 using CarDealer.Application.Interfaces.CQRS;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarDealer.Application.Makes.Queries.GetMake
 {
-	public class GateMakeQueryHandler : IQueryHandler<GateMakeQuery, MakeDto>
+	public class GateMakeQueryHandler : IRequestHandler<GateMakeQuery, MakeDto>
 	{
 		private readonly ICarDealerContext context;
 		private readonly IMapper mapper;
@@ -21,15 +23,16 @@ namespace CarDealer.Application.Makes.Queries.GetMake
 			this.mapper = mapper;
 		}
 
-		public async Task<MakeDto> HandleAsync(GateMakeQuery query)
+		public async Task<MakeDto> Handle(GateMakeQuery request, CancellationToken cancellationToken)
 		{
-			var make = await this.context.Makes.FirstOrDefaultAsync(a => a.Id == query.Id);
+			var make = await this.context.Makes.FirstOrDefaultAsync(a => a.Id == request.Id);
 
 			if (make == null)
 				return null;
 
 			return mapper.Map<MakeDto>(make);
 		}
+
 	}
 }
 

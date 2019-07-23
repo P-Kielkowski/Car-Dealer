@@ -1,11 +1,12 @@
 ﻿using CarDealer.Application.Interfaces.CQRS;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CarDealer.Application.Makes.Commands.AddMake
 {
-	public class AddMakeCommand : ICommand
+	public class AddMakeCommand : IRequest<int>
 	{
 		public string Name { get; }
 

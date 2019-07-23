@@ -20,7 +20,7 @@ namespace CarDealer.Api.Controllers
     public class MakeController : BaseController
     {
 		private readonly ILogger<MakeController> logger;
-		public MakeController(ILogger<MakeController> logger ,IDispatcher dispatcher) : base(dispatcher)
+		public MakeController(ILogger<MakeController> logger )
 		{
 			this.logger = logger;
 		}
@@ -28,7 +28,8 @@ namespace CarDealer.Api.Controllers
 		[HttpGet]
 		public async Task<ActionResult> GetAllMakes()
 		{
-			var makes = await this.dispatcher.HandleQueryAsync<GetAllMakesQuery, List<MakeWithModelsDto>>(new GetAllMakesQuery());
+			
+			var makes = await this.Mediator.Send(new GetAllMakesQuery());
 			//this.logger.LogInformation("Getting item {ID}", query.Id);
 
 			if (makes == null)
@@ -37,13 +38,13 @@ namespace CarDealer.Api.Controllers
 				return NotFound();
 			}
 
-			return Ok();
+			return Ok(makes);
 		}
 
 		[HttpGet("{Id}")]
 		public async Task<ActionResult<MakeDto>> GetMake([FromRoute] GateMakeQuery query)
 		{
-			var make = await this.dispatcher.HandleQueryAsync<GateMakeQuery, MakeDto>(query);
+			var make = await this.Mediator.Send(query);
 			this.logger.LogInformation("Getting item {ID}", query.Id);
 
 			if (make == null)
@@ -56,17 +57,17 @@ namespace CarDealer.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> CreateMake([FromBody] AddMakeCommand command)
+		public async Task<ActionResult<int>> CreateMake([FromBody] AddMakeCommand command)
 		{
-			await this.dispatcher.HandleCommandAsync(command);
+			int id = await this.Mediator.Send(command);
 
-			return Ok();
+			return Ok(id);
 		}
 
 		[HttpPut]
 		public async Task<ActionResult> UpdateMake([FromBody] UpdateMakeCommand command)
 		{
-			await this.dispatcher.HandleCommandAsync(command);
+			await this.Mediator.Send(command);
 
 			return NoContent();
 		}
@@ -74,7 +75,7 @@ namespace CarDealer.Api.Controllers
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> DeleteMake( int id)
 		{
-			await this.dispatcher.HandleCommandAsync( new DeleteMakeCommand(id) );
+			await this.Mediator.Send(new DeleteMakeCommand(id));
 
 			return NoContent();
 		}

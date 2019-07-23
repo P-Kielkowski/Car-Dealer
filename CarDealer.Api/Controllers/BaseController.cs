@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CarDealer.Application.Interfaces.CQRS;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace CarDealer.Api.Controllers
 {
@@ -12,11 +15,8 @@ namespace CarDealer.Api.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-		protected readonly IDispatcher dispatcher;
+		private  IMediator _mediator;
+		protected IMediator Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
 
-		public BaseController(IDispatcher _dispatcher)
-		{
-			this.dispatcher = _dispatcher;
-		}
 	}
 }

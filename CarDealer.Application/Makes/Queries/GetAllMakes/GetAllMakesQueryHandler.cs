@@ -2,16 +2,18 @@
 using CarDealer.Application.Dto;
 using CarDealer.Application.Interfaces;
 using CarDealer.Application.Interfaces.CQRS;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarDealer.Application.Makes.Queries.GetAllMakes
 {
-	public class GetAllMakesQueryHandler : IQueryHandler<GetAllMakesQuery, List<MakeWithModelsDto>>
+	public class GetAllMakesQueryHandler : IRequestHandler<GetAllMakesQuery, List<MakeWithModelsDto>>
 	{
 		private readonly ICarDealerContext context;
 		private readonly IMapper mapper;
@@ -21,14 +23,17 @@ namespace CarDealer.Application.Makes.Queries.GetAllMakes
 			this.context = context;
 			this.mapper = mapper;
 		}
-		public async Task<List<MakeWithModelsDto>> HandleAsync(GetAllMakesQuery query)
+
+		public async Task<List<MakeWithModelsDto>> Handle(GetAllMakesQuery request, CancellationToken cancellationToken)
 		{
 			var makes = await context.Makes.Include(a => a.Models).ToListAsync();
 
-			var makesDto = mapper.Map <List<MakeWithModelsDto>>(makes);
+			if (makes == null)
+				return null;
 
-			return makesDto;
+			return mapper.Map<List<MakeWithModelsDto>>(makes); 
 		}
+
 	}
 
 }

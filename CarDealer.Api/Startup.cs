@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Http;
 using Polly;
 using AutoMapper;
 using System.Reflection;
+using MediatR;
 
 namespace CarDealer.Api
 {
@@ -52,6 +53,7 @@ namespace CarDealer.Api
 				mg => mg.MigrationsAssembly("CarDealer.Persistance")
 			));
 
+			services.AddMediatR(Assembly.GetAssembly(typeof(ICarDealerContext)));
 			services.AddAutoMapper(Assembly.GetAssembly(typeof(ICarDealerContext)));
 			services.AddPollyHttpClient(loggerFactory, "PolyClient", "https://httasfdasfdasfasfdsasdpbin.org/get", 5);
 			services.AddSwaggerGen( c=> c.SwaggerDoc("v1", new Info { Title = "CarDealer API", Version = "V1" }));
