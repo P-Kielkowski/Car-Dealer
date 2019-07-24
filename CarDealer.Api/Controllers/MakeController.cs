@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CarDealer.Application.Dto;
 using CarDealer.Application.Interfaces.CQRS;
 using CarDealer.Application.Makes.Commands.AddMake;
 using CarDealer.Application.Makes.Commands.DeleteMake;
@@ -26,7 +25,7 @@ namespace CarDealer.Api.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult> GetAllMakes()
+		public async Task<ActionResult<List<GetAllMakesDto>>> GetAllMakes()
 		{
 			
 			var makes = await this.Mediator.Send(new GetAllMakesQuery());
@@ -42,7 +41,7 @@ namespace CarDealer.Api.Controllers
 		}
 
 		[HttpGet("{Id}")]
-		public async Task<ActionResult<MakeDto>> GetMake([FromRoute] GateMakeQuery query)
+		public async Task<ActionResult<GetMakeDto>> GetMake([FromRoute] GateMakeQuery query)
 		{
 			var make = await this.Mediator.Send(query);
 			this.logger.LogInformation("Getting item {ID}", query.Id);
