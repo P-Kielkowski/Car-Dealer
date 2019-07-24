@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CarDealer.Application.Dto;
 using CarDealer.Application.Interfaces;
 using CarDealer.Application.Interfaces.CQRS;
 using MediatR;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CarDealer.Application.Makes.Queries.GetMake
 {
-	public class GateMakeQueryHandler : IRequestHandler<GateMakeQuery, MakeDto>
+	public class GateMakeQueryHandler : IRequestHandler<GateMakeQuery, GetMakeDto>
 	{
 		private readonly ICarDealerContext context;
 		private readonly IMapper mapper;
@@ -23,14 +22,14 @@ namespace CarDealer.Application.Makes.Queries.GetMake
 			this.mapper = mapper;
 		}
 
-		public async Task<MakeDto> Handle(GateMakeQuery request, CancellationToken cancellationToken)
+		public async Task<GetMakeDto> Handle(GateMakeQuery request, CancellationToken cancellationToken)
 		{
 			var make = await this.context.Makes.FirstOrDefaultAsync(a => a.Id == request.Id);
 
 			if (make == null)
 				return null;
 
-			return mapper.Map<MakeDto>(make);
+			return mapper.Map<GetMakeDto>(make);
 		}
 
 	}

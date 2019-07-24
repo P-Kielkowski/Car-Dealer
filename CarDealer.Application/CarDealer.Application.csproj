@@ -16,4 +16,8 @@
     <PackageReference Include="NLog" Version="4.6.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Commands\" />
+  </ItemGroup>
+
 </Project>
