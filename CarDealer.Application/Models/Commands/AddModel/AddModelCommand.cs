@@ -9,7 +9,14 @@ namespace CarDealer.Application.Models.Commands.AddModel
 	{
 		public int Id { get;  }
 		public string Name { get; }
-		public int MakeId { get;  }
+		public int MakeId { get; }
+
+		public AddModelCommand( int id, string name, int makeId )
+		{
+			this.Id = id;
+			this.Name = name;
+			this.MakeId = makeId;
+		}
 
 	}
 }
