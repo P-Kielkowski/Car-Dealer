@@ -27,13 +27,10 @@ namespace CarDealer.Api.Controllers
 		[HttpGet]
 		public async Task<ActionResult<List<GetAllMakesDto>>> GetAllMakes()
 		{
-			
 			var makes = await this.Mediator.Send(new GetAllMakesQuery());
-			//this.logger.LogInformation("Getting item {ID}", query.Id);
 
 			if (makes == null)
 			{
-				//this.logger.LogWarning("Cannot find Make object with corresponding id: {0}", query.Id);
 				return NotFound();
 			}
 
@@ -41,7 +38,7 @@ namespace CarDealer.Api.Controllers
 		}
 
 		[HttpGet("{Id}")]
-		public async Task<ActionResult<GetMakeDto>> GetMake([FromRoute] GateMakeQuery query)
+		public async Task<ActionResult<GetMakeDto>> GetMake([FromRoute] GetMakeQuery query)
 		{
 			var make = await this.Mediator.Send(query);
 			this.logger.LogInformation("Getting item {ID}", query.Id);

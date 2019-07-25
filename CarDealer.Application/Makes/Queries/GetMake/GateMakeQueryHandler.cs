@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CarDealer.Application.Makes.Queries.GetMake
 {
-	public class GateMakeQueryHandler : IRequestHandler<GateMakeQuery, GetMakeDto>
+	public class GateMakeQueryHandler : IRequestHandler<GetMakeQuery, GetMakeDto>
 	{
 		private readonly ICarDealerContext context;
 		private readonly IMapper mapper;
@@ -22,7 +22,7 @@ namespace CarDealer.Application.Makes.Queries.GetMake
 			this.mapper = mapper;
 		}
 
-		public async Task<GetMakeDto> Handle(GateMakeQuery request, CancellationToken cancellationToken)
+		public async Task<GetMakeDto> Handle(GetMakeQuery request, CancellationToken cancellationToken)
 		{
 			var make = await this.context.Makes.FirstOrDefaultAsync(a => a.Id == request.Id);
 

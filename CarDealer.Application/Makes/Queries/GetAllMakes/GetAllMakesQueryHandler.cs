@@ -25,7 +25,7 @@ namespace CarDealer.Application.Makes.Queries.GetAllMakes
 
 		public async Task<List<GetAllMakesDto>> Handle(GetAllMakesQuery request, CancellationToken cancellationToken)
 		{
-			var makes = await context.Makes.Include(a => a.Models).ToListAsync();
+			var makes = await context.Makes.Include(a => a.Models).ToListAsync(cancellationToken);
 
 			if (makes == null)
 				return null;

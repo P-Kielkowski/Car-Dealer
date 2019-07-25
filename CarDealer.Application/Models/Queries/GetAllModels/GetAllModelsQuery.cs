@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CarDealer.Application.Models.Queries.GetAllModels
 {
-	class GetAllModelsQuery
+	public class GetAllModelsQuery : IRequest<List<GetAllModelsDto>>
 	{
 	}
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CarDealer.Application.Makes.Queries.GetMake
 {
-	public class GateMakeQuery : IRequest<GetMakeDto>
+	public class GetMakeQuery : IRequest<GetMakeDto>
 	{
 		public int Id { get; set; }
 
