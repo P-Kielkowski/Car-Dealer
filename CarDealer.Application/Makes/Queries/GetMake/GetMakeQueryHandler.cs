@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace CarDealer.Application.Makes.Queries.GetMake
 {
-	public class GateMakeQueryHandler : IRequestHandler<GetMakeQuery, GetMakeDto>
+	public class GetMakeQueryHandler : IRequestHandler<GetMakeQuery, GetMakeDto>
 	{
 		private readonly ICarDealerContext context;
 		private readonly IMapper mapper;
 
-		public GateMakeQueryHandler(ICarDealerContext carDealerContext, IMapper mapper)
+		public GetMakeQueryHandler(ICarDealerContext carDealerContext, IMapper mapper)
 		{
 			this.context = carDealerContext;
 			this.mapper = mapper;

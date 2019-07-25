@@ -24,6 +24,7 @@ using Polly;
 using AutoMapper;
 using System.Reflection;
 using MediatR;
+using FluentValidation.AspNetCore;
 
 namespace CarDealer.Api
 {
@@ -42,7 +43,8 @@ namespace CarDealer.Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+				.AddFluentValidation(rs => rs.RegisterValidatorsFromAssemblyContaining<ICarDealerContext>());
 
 			services.AddQueryOrCommand(typeof(ICommandHandler<>));
 			services.AddQueryOrCommand(typeof(IQueryHandler<,>));
@@ -56,7 +58,7 @@ namespace CarDealer.Api
 			services.AddMediatR(Assembly.GetAssembly(typeof(ICarDealerContext)));
 			services.AddAutoMapper(Assembly.GetAssembly(typeof(ICarDealerContext)));
 			services.AddPollyHttpClient(loggerFactory, "PolyClient", "https://httasfdasfdasfasfdsasdpbin.org/get", 5);
-			services.AddSwaggerGen( c=> c.SwaggerDoc("v1", new Info { Title = "CarDealer API", Version = "V1" }));
+			services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "CarDealer API", Version = "V1" }));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
