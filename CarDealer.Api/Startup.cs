@@ -26,6 +26,7 @@ using System.Reflection;
 using MediatR;
 using FluentValidation.AspNetCore;
 
+
 namespace CarDealer.Api
 {
 	public class Startup
@@ -57,7 +58,7 @@ namespace CarDealer.Api
 
 			services.AddMediatR(Assembly.GetAssembly(typeof(ICarDealerContext)));
 			services.AddAutoMapper(Assembly.GetAssembly(typeof(ICarDealerContext)));
-			services.AddPollyHttpClient(loggerFactory, "PolyClient", "https://httasfdasfdasfasfdsasdpbin.org/get", 5);
+			services.AddPollyHttpClient(loggerFactory, "RetryClient", "https://sampleUrl.com/", 7);
 			services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "CarDealer API", Version = "V1" }));
 		}
 

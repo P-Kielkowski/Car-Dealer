@@ -17,7 +17,7 @@ namespace CarDealer.Application.Makes.Queries.GetAllMakes
 		private readonly ICarDealerContext context;
 		private readonly IMapper mapper;
 
-		public GetAllMakesQueryHandler(ICarDealerContext context, IMapper mapper)
+		public GetAllMakesQueryHandler(ICarDealerContext context, IMapper mapper )
 		{
 			this.context = context;
 			this.mapper = mapper;

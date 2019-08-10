@@ -28,7 +28,7 @@ namespace CarDealer.Api.Extensions
 			return services;
 		}
 
-		public static IServiceCollection AddPollyHttpClient(this IServiceCollection services, ILoggerFactory loggerFactory, string clientName, string baseUrl, int retryCount )
+		public static void AddPollyHttpClient(this IServiceCollection services, ILoggerFactory loggerFactory, string clientName, string baseUrl, int retryCount )
 		{
 			//random delay between retries
 			Random jitter = new Random();
@@ -40,23 +40,17 @@ namespace CarDealer.Api.Extensions
 				 throw new BrokenCircuitException("Service inoperative. Please try again later");
 			 };
 
-			Action onReset = () => logger.LogWarning("ON reset: Circuit Breaker is back to retries");
-			Action onHalfOpen = () => logger.LogWarning("ON half open: Circuit Breaker is in half open state");
-
-
 			services.AddHttpClient(clientName,
 				client => client.BaseAddress = new Uri(baseUrl))
-					.AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(retryCount,
-					retryattempt => TimeSpan.FromSeconds(Math.Pow(2, retryattempt)) + TimeSpan.FromMilliseconds(jitter.Next(0, 100)),
-					onRetry: (outcome, timespan, retryAttempt, context) =>
-					{
-						logger.LogWarning("Delaying for {delay}ms, then making retry {retry}.", timespan.TotalMilliseconds, retryAttempt);
-					}
-					))
-					.AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(3,TimeSpan.FromSeconds(10),onBreak,onReset,onHalfOpen));
+					.AddTransientHttpErrorPolicy(builder => builder
+						.WaitAndRetryAsync(retryCount,
+							retryattempt => TimeSpan.FromSeconds(Math.Pow(2, retryattempt)) + TimeSpan.FromMilliseconds(jitter.Next(0, 100)),
+							onRetry: (outcome, timespan, retryAttempt, context) =>
+							{
+								logger.LogWarning($"Delaying for {timespan.TotalMilliseconds}ms, then making retry {retryAttempt}.");
+							}
+							));
 					
-
-			return null;
 		}
 
 
