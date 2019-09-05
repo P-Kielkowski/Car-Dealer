@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\EM.Common\EM.Common\EM.Common.csproj" />
     <ProjectReference Include="..\CarDealer.Application\CarDealer.Application.csproj" />
     <ProjectReference Include="..\CarDealer.Common\CarDealer.Common.csproj" />
     <ProjectReference Include="..\CarDealer.Persistance\CarDealer.Persistance.csproj" />

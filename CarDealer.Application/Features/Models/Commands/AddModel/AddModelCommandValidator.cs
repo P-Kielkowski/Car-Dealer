@@ -9,7 +9,6 @@ namespace CarDealer.Application.Models.Commands.AddModel
 	{
 		public AddModelCommandValidator()
 		{
-			RuleFor(x => x.Id).NotEmpty();
 			RuleFor(x => x.MakeId).NotEmpty();
 			RuleFor(x => x.Name).NotEmpty().MinimumLength(2);
 		}

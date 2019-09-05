@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /CarDealer.Infrastructure/WebContentDownloader.cs
+/CarDealer.Api.Tests/UnitTest1.cs

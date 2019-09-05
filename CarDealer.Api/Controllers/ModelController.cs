@@ -13,17 +13,17 @@ namespace CarDealer.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelsController : BaseController
+    public class ModelController : BaseController
     {
 		private readonly ILogger<MakeController> logger;
-		public ModelsController(ILogger<MakeController> logger)
+		public ModelController(ILogger<MakeController> logger)
 		{
 			this.logger = logger;
 		}
 
 
 		[HttpGet]
-		public async Task<ActionResult<List<GetAllModelsQuery>>> GetAllModels()
+		public async Task<ActionResult<List<GetAllModelsDto>>> GetAllModels()
 		{
 			var models = await this.Mediator.Send(new GetAllModelsQuery());
 

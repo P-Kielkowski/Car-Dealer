@@ -14,6 +14,7 @@ namespace CarDealer.Application.Mappings
 	{
 		public MappingProfile()
 		{
+			
 			CreateMap<Make, GetMakeDto>();
 			CreateMap<Make, GetAllMakesDto>();
 			CreateMap<Make, MakeDto>();

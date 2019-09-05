@@ -47,9 +47,9 @@ namespace CarDealer.Api
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddFluentValidation(rs => rs.RegisterValidatorsFromAssemblyContaining<ICarDealerContext>());
 
-			services.AddQueryOrCommand(typeof(ICommandHandler<>));
-			services.AddQueryOrCommand(typeof(IQueryHandler<,>));
-			services.AddScoped<IDispatcher, Dispatcher>();
+			//services.AddQueryOrCommand(typeof(ICommandHandler<>));
+			//services.AddQueryOrCommand(typeof(IQueryHandler<,>));
+			//services.AddScoped<IDispatcher, Dispatcher>();
 
 			services.AddDbContext<ICarDealerContext, CarDealerContext>(
 				opt => opt.UseSqlServer(Configuration.GetConnectionString("CarDealerDb"),
@@ -80,7 +80,6 @@ namespace CarDealer.Api
 			app.UseMvc();
 			app.UseSwagger();
 			app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "post API V1"));
-
 		}
 	}
 }
